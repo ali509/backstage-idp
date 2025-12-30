@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: myapp
+  description: An example of a Backstage application.
+
+  # Example for optional annotations
+  annotations:
+    github.com/project-slug: ali509/myapp
+    # backstage.io/techdocs-ref: dir:.
+spec:
+  type: service
+  owner: ali509
+  lifecycle: experimental

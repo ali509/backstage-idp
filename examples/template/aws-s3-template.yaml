@@ -1,0 +1,47 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: aws-s3-demo-template
+  title: AWS S3 Bucket Provisioner
+  description: A simple demo template that creates an S3 bucket directly in AWS.
+spec:
+  owner: user:guest
+  type: resource
+
+  parameters:
+    - title: Bucket Details
+      required:
+        - bucketName
+      properties:
+        bucketName:
+          title: S3 Bucket Name
+          type: string
+          description: Must be globally unique (e.g., ali509-demo-bucket-2025)
+          ui:autofocus: true
+    - title: AWS Configuration
+      required:
+        - region
+      properties:
+        region:
+          title: AWS Region
+          type: string
+          default: us-east-1
+          enum:
+            - us-east-1
+            - us-west-2
+            - eu-central-1
+
+  steps:
+    # This action requires the @roadiehq/scaffolder-backend-module-aws plugin installed
+    - id: create-s3-bucket
+      name: Initializing S3 Bucket
+      action: roadiehq:aws:s3:cp
+      input:
+        bucketName: ${{ parameters.bucketName }}
+        region: ${{ parameters.region }}
+        path: .
+
+  output:
+    links:
+      - title: Go to S3 Console
+        url: https://s3.console.aws.amazon.com/s3/buckets/${{ parameters.bucketName }}
