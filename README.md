@@ -9,6 +9,7 @@ This is your newly scaffolded Backstage App. Good Luck!
 - [Prerequisites](#-prerequisites)
 - [Scaffolding a New App](#-scaffolding-a-new-app)
 - [Local Setup for Team Members](#-local-setup-for-team-members)
+- [Updating Entity Ownership](#-local-setup-for-team-members)
 - [Configuration &amp; Security](#-configuration--security)
 
 ---
@@ -18,8 +19,8 @@ This is your newly scaffolded Backstage App. Good Luck!
 Before you begin, ensure you have **Node.js (Active LTS)** installed. Backstage uses Yarn. Enable Corepack to ensure you have the correct version:
 
 ```bash
-node --version — Install a latest version
-corepack enable
+brew install node
+node --version
 ```
 
 ## 👥 Scaffolding a New App
@@ -58,7 +59,7 @@ Every team member needs their own credentials for local development.
 1. Go to [GitHub Settings &gt; Tokens (Classic)](https://github.com/settings/tokens "null").
 2. Click  **Generate new token (classic)** .
 3. Select the **`repo`** and **`read:org`** scopes.
-4. Copy the token immediately.
+4. Copy the token.
 
 ### B. Create a GitHub OAuth App
 
@@ -72,7 +73,7 @@ Every team member needs their own credentials for local development.
 
 ### Export Secrets
 
-Run this in your terminal before starting the app
+Navigate to the repo folder. Run this in your terminal before starting the app
 
 ```
 export GITHUB_TOKEN=your_pat_token_here
@@ -85,6 +86,8 @@ export AUTH_GITHUB_CLIENT_SECRET=your_client_secret_here
 If you encounter permission issues with Yarn, enable Corepack:
 
 ```
+npm install -g corepack
+
 # Install dependencies
 yarn install
 
@@ -93,9 +96,48 @@ yarn start
 ```
 
 > [!TIP]
-> Once started, the site will launch at: **http://localhost:3000**
+> Once started, the site will launch at: **http://localhost:3000
+> **
 
 ---
+
+## ⚙️ Updating Entity Ownership
+
+Each team member should update the metadata files to reflect their own GitHub username. This ensures you appear as the owner of the services you manage in the Backstage Catalog.
+
+#### 1. Update Service Metadata
+
+Edit `catalog-info.yaml` and replace `<Your-Username>` with your actual GitHub username:
+
+**YAML**
+
+```
+metadata:
+  annotations:
+    # Format: <organization>/<repository>
+    github.com/project-slug: <Your-Username>/backstage-idp
+spec:
+  type: service
+  owner: <Your-Username>
+  lifecycle: experimental
+```
+
+#### 2. Update User Entity
+
+Edit `examples/org.yaml` to register yourself as a user in the system:
+
+**YAML**
+
+```
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: <Your-Username>
+spec:
+  profile:
+    displayName: Your Full Name
+```
+
 
 ## ⚙️ Configuration & Security
 
